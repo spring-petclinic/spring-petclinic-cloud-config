@@ -1,0 +1,38 @@
+customers-service-id: http://customers-service.default.svc.cluster.local:8080
+vists-service-id: http://vists-service.default.svc.cluster.local:8080
+
+spring:
+  cloud:
+    kubernetes:
+      discovery:
+        enabled: true
+    loadbalancer:
+      ribbon:
+        enabled: false
+    gateway:
+      routes:
+      x-forwarded:	
+        enabled: true	
+        for-enabled: true	
+        proto-enabled: true	
+        host-append: false	
+        port-append: false	
+        proto-append: false	      
+        - id: vets-service
+          uri: http://vets-service.default.svc.cluster.local:8080
+          predicates:
+            - Path=/api/vet/**
+          filters:
+            - StripPrefix=2
+        - id: visits-service
+          uri: http://visits-service.default.svc.cluster.local:8080
+          predicates:
+            - Path=/api/visit/**
+          filters:
+            - StripPrefix=2
+        - id: customers-service
+          uri: http://customers-service.default.svc.cluster.local:8080
+          predicates:
+            - Path=/api/customer/**
+          filters:
+            - StripPrefix=2

@@ -1,0 +1,72 @@
+# COMMON APPLICATION PROPERTIES
+
+# start services on random port by default  
+server.port: 0
+
+# embedded database init, supports mysql too trough the 'mysql' spring profile
+spring:
+  datasource:
+    schema: classpath*:db/hsqldb/schema.sql
+    data: classpath*:db/hsqldb/data.sql
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      generate-ddl: false
+  sleuth:
+    sampler:
+      probability: 1.0
+    config:
+      # Allow the microservices to override the remote properties with their own System properties or config file
+      allow-override: true
+      # Override configuration with any local property source
+      override-none: true
+  cloud:
+    services:
+      registrationMethod: direct
+
+# Spring Boot 1.5 makes actuator secure by default
+management.security.enabled: false
+# Temporary hack required by the Spring Boot 2 / Spring Cloud Finchley branch
+# Waiting issue https://github.com/spring-projects/spring-boot/issues/13042
+spring.cloud.refresh.refreshable: false
+wavefront.application.name: pet-clinic-microservices-local
+
+# Logging
+logging.level.org.springframework: INFO
+logging.level.org.hibernate.SQL: DEBUG
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+logging.level.org.springframework.jdbc.core.JdbcTemplate: DEBUG
+logging.level.org.springframework.jdbc.core.StatementCreatorUtils: TRACE
+
+# Metrics
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+eureka.client.fetchRegistry: true
+spring.cloud.kubernetes.discovery.enabled: false
+
+
+---
+spring:
+  profiles: mysql
+  datasource:
+    schema: classpath*:db/mysql/schema.sql
+    data: classpath*:db/mysql/data.sql
+    url: jdbc:mysql://localhost:3306/service_instance_db?useSSL=false&queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName&zipkinServiceName=localDockerDb
+    platform: mysql
+    username: root
+    password: petclinic
+    initialization-mode: ALWAYS

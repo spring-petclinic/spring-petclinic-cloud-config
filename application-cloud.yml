@@ -1,0 +1,24 @@
+server:
+  port: 8080
+#Credentials are defined per microservice
+spring:
+  datasource:
+    schema: classpath*:db/mysql/schema.sql
+    data: classpath*:db/mysql/data.sql
+    platform: mysql
+    initialization-mode: always
+  cloud:
+    services:
+      registrationMethod: direct
+
+management:
+  metrics:
+    export:
+      wavefront:
+        uri: ${vcap.services.wavefront.credentials.uri}
+        api-token: ${vcap.services.wavefront.credentials.api-token}
+
+wavefront:
+  application:
+    name: spring-petclinic
+  freemium-account: ${vcap.services.wavefront.credentials.fremium}

@@ -1,0 +1,11 @@
+server:
+  port: 8080
+wavefront:
+  application:
+    name: pet-clinic-k8s
+  freemium-account: false
+management:
+  metrics:
+    export:
+      wavefront:
+        enabled: false

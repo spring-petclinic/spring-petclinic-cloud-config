@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: ${vcap.services.vets-db.credentials.jdbcUrl}&queryInterceptors=brave.mysql8.TracingQueryInterceptor&exceptionInterceptors=brave.mysql8.TracingExceptionInterceptor&zipkinServiceName=vets-db
+    username: ${vcap.services.vets-db.credentials.username}
+    password: ${vcap.services.vets-db.credentials.password}
