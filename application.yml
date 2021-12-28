@@ -10,6 +10,7 @@ spring:
     data: classpath*:db/hsqldb/data.sql
   jpa:
     show-sql: true
+    open-in-view: false
     hibernate:
       ddl-auto: none
       generate-ddl: false
@@ -61,7 +62,9 @@ spring.cloud.kubernetes.discovery.enabled: false
 
 ---
 spring:
-  profiles: mysql
+  config:
+    activate:
+      on-profile: mysql
   datasource:
     schema: classpath*:db/mysql/schema.sql
     data: classpath*:db/mysql/data.sql
