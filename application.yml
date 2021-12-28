@@ -10,6 +10,7 @@ spring:
     data: classpath*:db/hsqldb/data.sql
   jpa:
     show-sql: true
+    open-in-view: false
     hibernate:
       ddl-auto: none
       generate-ddl: false
